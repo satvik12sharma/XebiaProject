@@ -1,0 +1,397 @@
+import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_PATH = path.join(__dirname, 'database.json');
+
+const hashPassword = (pw) => bcrypt.hashSync(pw, 10);
+
+const seedData = {
+  users: [
+    {
+      _id: "u_superadmin",
+      email: "admin@company.com",
+      password: hashPassword("Admin@123"),
+      role: "SUPER_ADMIN",
+      name: "Super Admin",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_hrmanager",
+      email: "hr@company.com",
+      password: hashPassword("HrManager@123"),
+      role: "HR",
+      name: "Hr Manager",
+      employeeId: "EMP001",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_manager",
+      email: "manager@company.com",
+      password: hashPassword("Manager@123"),
+      role: "MANAGER",
+      name: "Manager",
+      employeeId: "EMP002",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_employee",
+      email: "employee@company.com",
+      password: hashPassword("Employee@123"),
+      role: "EMPLOYEE",
+      name: "Employee",
+      employeeId: "EMP003",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_finance",
+      email: "finance@company.com",
+      password: hashPassword("Finance@123"),
+      role: "FINANCE",
+      name: "Finance Exec",
+      employeeId: "EMP004",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_it",
+      email: "it@company.com",
+      password: hashPassword("ItAdmin@123"),
+      role: "IT",
+      name: "IT Admin",
+      employeeId: "EMP005",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      _id: "u_auditor",
+      email: "auditor@company.com",
+      password: hashPassword("Auditor@123"),
+      role: "AUDITOR",
+      name: "Auditor",
+      employeeId: "EMP006",
+      failedLoginAttempts: 0,
+      locked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ],
+  employees: [
+    {
+      _id: "e_hr",
+      employeeId: "EMP001",
+      firstName: "Sarah",
+      lastName: "Jenkins",
+      email: "hr@company.com",
+      mobile: "9876543210",
+      address: "123 HR Boulevard, City",
+      gender: "Female",
+      bloodGroup: "O+",
+      dob: "1990-05-15",
+      department: "HR",
+      designation: "HR Director",
+      joiningDate: "2024-01-10",
+      reportingManager: "EMP002",
+      employmentType: "Permanent",
+      salaryGrade: "Grade-A",
+      basicSalary: 80000,
+      hra: 25000,
+      status: "Active"
+    },
+    {
+      _id: "e_manager",
+      employeeId: "EMP002",
+      firstName: "David",
+      lastName: "Miller",
+      email: "manager@company.com",
+      mobile: "9876543211",
+      address: "456 Executive Way, City",
+      gender: "Male",
+      bloodGroup: "A+",
+      dob: "1985-08-22",
+      department: "Engineering",
+      designation: "Engineering Manager",
+      joiningDate: "2023-06-01",
+      reportingManager: "EMP001",
+      employmentType: "Permanent",
+      salaryGrade: "Grade-A+",
+      basicSalary: 120000,
+      hra: 35000,
+      status: "Active"
+    },
+    {
+      _id: "e_employee",
+      employeeId: "EMP003",
+      firstName: "Rahul",
+      lastName: "Sharma",
+      email: "employee@company.com",
+      mobile: "9876543212",
+      address: "789 Dev Street, City",
+      gender: "Male",
+      bloodGroup: "B+",
+      dob: "1995-11-30",
+      department: "Engineering",
+      designation: "Software Engineer",
+      joiningDate: "2026-01-15",
+      reportingManager: "EMP002",
+      employmentType: "Permanent",
+      salaryGrade: "Grade-B",
+      basicSalary: 60000,
+      hra: 12000,
+      status: "Active"
+    },
+    {
+      _id: "e_finance",
+      employeeId: "EMP004",
+      firstName: "Alice",
+      lastName: "Cooper",
+      email: "finance@company.com",
+      mobile: "9876543213",
+      address: "321 Money Lane, City",
+      gender: "Female",
+      bloodGroup: "AB+",
+      dob: "1992-03-10",
+      department: "Finance",
+      designation: "Finance Manager",
+      joiningDate: "2024-04-15",
+      reportingManager: "EMP001",
+      employmentType: "Permanent",
+      salaryGrade: "Grade-A",
+      basicSalary: 90000,
+      hra: 28000,
+      status: "Active"
+    },
+    {
+      _id: "e_it",
+      employeeId: "EMP005",
+      firstName: "Bob",
+      lastName: "Sysadmin",
+      email: "it@company.com",
+      mobile: "9876543214",
+      address: "99 Tech Center, City",
+      gender: "Male",
+      bloodGroup: "O-",
+      dob: "1988-12-05",
+      department: "IT",
+      designation: "IT Administrator",
+      joiningDate: "2025-02-01",
+      reportingManager: "EMP002",
+      employmentType: "Permanent",
+      salaryGrade: "Grade-B",
+      basicSalary: 70000,
+      hra: 20000,
+      status: "Active"
+    }
+  ],
+  departments: [
+    {
+      _id: "dep_eng",
+      departmentName: "Engineering",
+      departmentCode: "ENG",
+      manager: "EMP002",
+      employees: 82,
+      status: "Active"
+    },
+    {
+      _id: "dep_hr",
+      departmentName: "HR",
+      departmentCode: "HR",
+      manager: "EMP001",
+      employees: 5,
+      status: "Active"
+    },
+    {
+      _id: "dep_fin",
+      departmentName: "Finance",
+      departmentCode: "FIN",
+      manager: "EMP004",
+      employees: 3,
+      status: "Active"
+    },
+    {
+      _id: "dep_it",
+      departmentName: "IT",
+      departmentCode: "IT",
+      manager: "EMP005",
+      employees: 4,
+      status: "Active"
+    }
+  ],
+  candidates: [
+    {
+      _id: "cand_1",
+      candidateName: "Priya Singh",
+      email: "priya@gmail.com",
+      experience: 2,
+      skills: ["React", "NodeJS", "MongoDB"],
+      status: "Technical Interview",
+      resumeFileName: "priya_resume.pdf",
+      interviewNotes: "Solid coding skills, good communication."
+    },
+    {
+      _id: "cand_2",
+      candidateName: "John Doe",
+      email: "john.doe.hiring@gmail.com",
+      experience: 5,
+      skills: ["Python", "Django", "PostgreSQL", "AWS"],
+      status: "HR Interview",
+      resumeFileName: "john_doe_resume.pdf",
+      interviewNotes: "Experienced backend engineer. Culture fit."
+    }
+  ],
+  attendance: [
+    {
+      _id: "att_1",
+      employeeId: "EMP003",
+      date: "2026-06-30",
+      clockIn: "08:55",
+      clockOut: "18:05",
+      workingHours: 9.16,
+      status: "Present",
+      overtime: 1.16,
+      location: "Office (QR Code Scan)"
+    },
+    {
+      _id: "att_2",
+      employeeId: "EMP003",
+      date: "2026-07-01",
+      clockIn: "09:02",
+      clockOut: "",
+      workingHours: 0,
+      status: "Present",
+      overtime: 0,
+      location: "Work From Home (GPS)"
+    }
+  ],
+  leaves: [
+    {
+      _id: "lv_1",
+      employeeId: "EMP003",
+      leaveType: "Casual Leave",
+      startDate: "2026-07-15",
+      endDate: "2026-07-17",
+      reason: "Family function travel",
+      status: "Approved",
+      approvedBy: "EMP002"
+    },
+    {
+      _id: "lv_2",
+      employeeId: "EMP003",
+      leaveType: "Sick Leave",
+      startDate: "2026-07-20",
+      endDate: "2026-07-20",
+      reason: "Dental appointment",
+      status: "Pending",
+      approvedBy: ""
+    }
+  ],
+  payroll: [
+    {
+      _id: "pay_1",
+      employeeId: "EMP003",
+      month: "June 2026",
+      basicSalary: 60000,
+      hra: 12000,
+      bonus: 5000,
+      overtime: 3000,
+      deductions: 2500,
+      netSalary: 77500,
+      status: "Paid",
+      processedDate: "2026-06-30"
+    }
+  ],
+  projects: [
+    {
+      _id: "proj_1",
+      projectName: "Employee Portal",
+      description: "Enterprise Workforce Platform containing Core Modules and AI Assistant.",
+      manager: "EMP002",
+      status: "In Progress",
+      deadline: "2026-09-30"
+    }
+  ],
+  tasks: [
+    {
+      _id: "tsk_1",
+      projectId: "proj_1",
+      project: "Employee Portal",
+      task: "Build Attendance Module",
+      assignedTo: "EMP003",
+      priority: "High",
+      status: "In Progress",
+      deadline: "2026-08-15"
+    },
+    {
+      _id: "tsk_2",
+      projectId: "proj_1",
+      project: "Employee Portal",
+      task: "Write Database Schemas",
+      assignedTo: "EMP003",
+      priority: "Medium",
+      status: "Completed",
+      deadline: "2026-07-05"
+    }
+  ],
+  assets: [
+    {
+      _id: "as_1",
+      assetName: "MacBook Pro 16\"",
+      serialNumber: "MBP-2026-X99",
+      type: "Laptop",
+      assignedTo: "EMP003",
+      status: "Assigned",
+      assignedDate: "2026-01-16"
+    }
+  ],
+  tickets: [
+    {
+      _id: "tkt_1",
+      employeeId: "EMP003",
+      title: "VPN Access Request",
+      description: "Need VPN configuration details to connect from home network.",
+      priority: "Medium",
+      status: "Open",
+      assignedTo: "EMP005"
+    }
+  ],
+  notifications: [
+    {
+      _id: "not_1",
+      recipientId: "EMP003",
+      message: "Welcome to Enterprise Workforce! Your profile has been completed.",
+      read: false,
+      createdAt: new Date().toISOString()
+    }
+  ],
+  auditLogs: [
+    {
+      _id: "log_1",
+      userId: "u_superadmin",
+      action: "Database Initialized",
+      details: "Seed script run successfully.",
+      timestamp: new Date().toISOString()
+    }
+  ]
+};
+
+fs.writeFileSync(DB_PATH, JSON.stringify(seedData, null, 2), 'utf8');
+console.log("Database seeded successfully!");

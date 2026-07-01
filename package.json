@@ -1,0 +1,16 @@
+{
+  "name": "enterprise-workforce-management-platform",
+  "version": "1.0.0",
+  "description": "Enterprise Workforce Management Platform with AI Operations Assistant",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "seed": "npm run seed --prefix backend",
+    "dev-backend": "npm run dev --prefix backend",
+    "dev-frontend": "npm run dev --prefix frontend",
+    "dev": "node start-dev.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
