@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users, Briefcase, Calendar, Laptop, MapPin, Globe, LogOut } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
+import { HeroSection } from './blocks/hero-section-dark';
 
 export default function DashboardOverview({
   employees,
@@ -17,6 +18,25 @@ export default function DashboardOverview({
 }) {
   return (
     <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+      
+      <HeroSection
+        title="Welcome to Operations"
+        subtitle={{
+          regular: "Transform your workflows into ",
+          gradient: "seamless digital experiences",
+        }}
+        description="Streamline your daily tasks, manage your team, and track organizational growth all from one unified, lightning-fast dashboard."
+        ctaText="Explore Dashboard"
+        ctaHref="#"
+        gridOptions={{
+          angle: 65,
+          opacity: 0.7,
+          cellSize: 50,
+          lightLineColor: "#f59e0b40",
+          darkLineColor: "#f59e0b40",
+        }}
+      />
+
       <div className="metrics-grid">
         <div className="glass-card metric-card">
           <div>
@@ -72,19 +92,19 @@ export default function DashboardOverview({
               ]}>
                 <defs>
                   <linearGradient id="colorEmp" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.2}/>
                   </linearGradient>
                   <linearGradient id="colorTsk" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--secondary)" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="var(--secondary)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--secondary)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--secondary)" stopOpacity={0.2}/>
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="name" stroke="var(--text-secondary)" />
                 <YAxis stroke="var(--text-secondary)" />
                 <Tooltip contentStyle={{ background: 'var(--bg-sidebar)', borderColor: 'var(--border-glass)' }} />
-                <Area type="monotone" dataKey="Employees" stroke="var(--primary)" fillOpacity={1} fill="url(#colorEmp)" />
-                <Area type="monotone" dataKey="Tasks" stroke="var(--secondary)" fillOpacity={1} fill="url(#colorTsk)" />
+                <Area type="monotone" dataKey="Employees" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorEmp)" />
+                <Area type="monotone" dataKey="Tasks" stroke="var(--secondary)" strokeWidth={3} fillOpacity={1} fill="url(#colorTsk)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

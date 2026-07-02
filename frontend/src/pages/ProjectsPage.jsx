@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 export default function ProjectsPage({ 
   projects, showAddProj, setShowAddProj, newProjData, setNewProjData, handleCreateProj,
   tasks, showAddTask, setShowAddTask, newTaskData, setNewTaskData, handleCreateTask,
-  employees
+  employees, handleTaskStatusChange
 }) {
   return (
     <div className="glass-card" style={{ animation: 'fadeIn 0.3s ease-out' }}>
@@ -111,9 +111,28 @@ export default function ProjectsPage({
           <h4 style={{ marginBottom: '16px' }}>Task Board</h4>
           {tasks.map(tsk => (
             <div key={tsk._id} className="glass-card" style={{ marginBottom: '12px', padding: '16px', borderLeft: `3px solid ${tsk.priority === 'High' ? 'var(--danger)' : 'var(--primary)'}` }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <strong style={{ fontSize: '14px' }}>{tsk.task}</strong>
-                <span className="badge badge-warning">{tsk.status}</span>
+                <select 
+                  className={`badge badge-${tsk.status === 'Completed' ? 'success' : (tsk.status === 'Review' ? 'warning' : 'primary')}`}
+                  value={tsk.status} 
+                  onChange={(e) => handleTaskStatusChange(tsk._id, e.target.value)}
+                  style={{ 
+                    background: 'rgba(255,255,255,0.06)', 
+                    border: '1px solid var(--border-glass)', 
+                    color: 'white', 
+                    borderRadius: '4px',
+                    padding: '2px 6px',
+                    fontSize: '11px',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="To Do" style={{background: 'var(--bg-sidebar)'}}>To Do</option>
+                  <option value="In Progress" style={{background: 'var(--bg-sidebar)'}}>In Progress</option>
+                  <option value="Review" style={{background: 'var(--bg-sidebar)'}}>Review</option>
+                  <option value="Completed" style={{background: 'var(--bg-sidebar)'}}>Completed</option>
+                </select>
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>Project: {tsk.project}</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '6px 10px', borderRadius: '6px' }}>

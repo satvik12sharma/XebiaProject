@@ -1,14 +1,16 @@
 import React from 'react';
 import { DollarSign } from 'lucide-react';
 
-export default function PayrollPage({ payroll }) {
+export default function PayrollPage({ payroll, handleRunPayroll, userRole }) {
   return (
     <div className="glass-card" style={{ animation: 'fadeIn 0.3s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h3>Payroll & Compensation Records</h3>
-        <button className="btn btn-primary" style={{ width: 'auto' }}>
-          <DollarSign size={16} /> Run Payroll Cycle
-        </button>
+        {['SUPER_ADMIN', 'HR', 'FINANCE'].includes(userRole) && (
+          <button className="btn btn-primary" style={{ width: 'auto' }} onClick={handleRunPayroll}>
+            <DollarSign size={16} /> Run Payroll Cycle
+          </button>
+        )}
       </div>
 
       <div className="table-container">
@@ -29,7 +31,7 @@ export default function PayrollPage({ payroll }) {
               <tr key={pay._id}>
                 <td><strong>{pay.month}</strong></td>
                 <td>₹{pay.basicSalary.toLocaleString()}</td>
-                <td style={{ color: 'var(--success)' }}>+₹{(pay.hra + pay.bonus + pay.overtime).toLocaleString()}</td>
+                <td style={{ color: 'var(--success)' }}>+₹{(pay.hra + (pay.bonus || 0) + (pay.overtime || 0)).toLocaleString()}</td>
                 <td style={{ color: 'var(--danger)' }}>-₹{pay.deductions.toLocaleString()}</td>
                 <td><strong>₹{pay.netSalary.toLocaleString()}</strong></td>
                 <td><span className={`badge badge-${pay.status === 'Paid' ? 'success' : 'warning'}`}>{pay.status}</span></td>

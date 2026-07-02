@@ -17,7 +17,7 @@ function requireEnv(name, fallback) {
 
 const config = {
   // Server
-  port: parseInt(process.env.PORT || '5000', 10),
+  port: parseInt(process.env.PORT || '5005', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
 
   // Database
@@ -42,7 +42,7 @@ const config = {
     // Comma-separated list of allowed origins, or '*' for development
     allowedOrigins: process.env.CORS_ORIGINS
       ? process.env.CORS_ORIGINS.split(',').map(s => s.trim())
-      : ['http://localhost:5173', 'http://localhost:5000'],
+      : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5005'],
   },
 
   // Rate Limiting
