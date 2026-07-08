@@ -104,6 +104,11 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
+// Root route so visitors don't see "Cannot GET /"
+app.get('/', (req, res) => {
+  res.send('Workforce API Server is running!');
+});
+
 // ──────────────────────────────────────────────
 // Global Error Handler
 // ──────────────────────────────────────────────
