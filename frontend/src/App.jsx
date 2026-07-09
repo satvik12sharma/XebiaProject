@@ -191,9 +191,8 @@ export default function App() {
 
       const isFailed = empRes.status === 'rejected' || !empRes.value || !empRes.value.success;
       if (isFailed) {
-        console.warn("Backend API not reachable or database connection failed. Loading local mock fallback data.");
-        loadFallbackMockData();
-        return;
+        console.error("Backend API not reachable or database connection failed.");
+        throw new Error("Cannot fetch dashboard data. Backend connection failed.");
       }
 
       if (depRes.status === 'fulfilled' && depRes.value.success) setDepartments(depRes.value.departments);
@@ -212,63 +211,13 @@ export default function App() {
       if (pendingLvRes.status === 'fulfilled' && pendingLvRes.value.success) setPendingLeaves(pendingLvRes.value.leaves || []);
       if (auditLogsRes.status === 'fulfilled' && auditLogsRes.value.success) setAuditLogs(auditLogsRes.value.logs || []);
     } catch (err) {
-      console.warn("Failed to contact backend API. App running with mock simulation data.");
-      loadFallbackMockData();
+      console.error("Failed to contact backend API.", err);
+      // Optional: set a global error state to display to the user
+      alert("Failed to fetch dashboard data. Make sure the backend is running and you are online.");
     }
   };
 
-  const loadFallbackMockData = () => {
-    // Basic Offline Sandbox fallbacks
-    setDepartments([
-      { _id: '1', departmentName: 'Engineering', departmentCode: 'ENG', manager: 'EMP002', employees: 82, status: 'Active' },
-      { _id: '2', departmentName: 'HR', departmentCode: 'HR', manager: 'EMP001', employees: 5, status: 'Active' },
-      { _id: '3', departmentName: 'Finance', departmentCode: 'FIN', manager: 'EMP004', employees: 3, status: 'Active' }
-    ]);
-    setEmployees([
-      { _id: 'e1', employeeId: 'EMP001', firstName: 'Sarah', lastName: 'Jenkins', email: 'hr@company.com', mobile: '9876543210', department: 'HR', designation: 'HR Director', joiningDate: '2024-01-10', reportingManager: 'EMP002', status: 'Active', basicSalary: 80000 },
-      { _id: 'e2', employeeId: 'EMP002', firstName: 'David', lastName: 'Miller', email: 'manager@company.com', mobile: '9876543211', department: 'Engineering', designation: 'Engineering Manager', joiningDate: '2023-06-01', status: 'Active', basicSalary: 120000 },
-      { _id: 'e3', employeeId: 'EMP003', firstName: 'Rahul', lastName: 'Sharma', email: 'employee@company.com', mobile: '9876543212', department: 'Engineering', designation: 'Software Engineer', joiningDate: '2026-01-15', reportingManager: 'EMP002', status: 'Active', basicSalary: 60000, performanceReviews: [{ quarter: 'Q2', kpiScore: 88, managerRating: 4, overall: 'Excellent', feedback: 'Great team player. Delivers sprints on schedule.' }] }
-    ]);
-    setCandidates([
-      { _id: 'c1', candidateName: 'Priya Singh', email: 'priya@gmail.com', experience: 2, skills: ['React', 'NodeJS', 'MongoDB'], status: 'Technical Interview', aiAnalysis: { score: '88%', matchedSkills: ['React', 'Node.js', 'MongoDB'], missingSkills: ['Docker', 'AWS'], summary: 'Solid frontend skillset matching our core product line.' } }
-    ]);
-    setAttendance([
-      { _id: 'a1', date: '2026-07-01', clockIn: '08:58', clockOut: '18:02', workingHours: 9.07, status: 'Present', overtime: 1.07 }
-    ]);
-    setLeaves([
-      { _id: 'l1', leaveType: 'Casual Leave', startDate: '2026-07-15', endDate: '2026-07-16', reason: 'Family trip', status: 'Approved' }
-    ]);
-    setLeaveBalances({
-      allocated: { 'Casual Leave': 12, 'Sick Leave': 10, 'Earned Leave': 15 },
-      used: { 'Casual Leave': 2, 'Sick Leave': 1, 'Earned Leave': 0 },
-      remaining: { 'Casual Leave': 10, 'Sick Leave': 9, 'Earned Leave': 15 }
-    });
-    setPendingLeaves([
-      { _id: 'l2', employeeId: 'EMP003', employeeName: 'Rahul Sharma', leaveType: 'Sick Leave', startDate: '2026-07-20', endDate: '2026-07-20', reason: 'Dental appointment', status: 'Pending' }
-    ]);
-    setPayroll([
-      { _id: 'p1', month: 'June 2026', basicSalary: 60000, hra: 12000, bonus: 5000, overtime: 3000, deductions: 2500, netSalary: 77500, status: 'Paid', processedDate: '2026-06-30' }
-    ]);
-    setProjects([
-      { _id: 'pr1', projectName: 'Employee Portal', description: 'Enterprise Workforce Management Tool', manager: 'EMP002', status: 'In Progress', deadline: '2026-09-30' }
-    ]);
-    setTasks([
-      { _id: 't1', projectId: 'pr1', project: 'Employee Portal', task: 'Build Attendance Module', assignedTo: 'EMP003', priority: 'High', status: 'In Progress', deadline: '2026-08-15' }
-    ]);
-    setAssets([
-      { _id: 'as1', assetName: 'MacBook Pro 16"', serialNumber: 'MBP-2026-X99', type: 'Laptop', assignedTo: 'EMP003', status: 'Assigned' }
-    ]);
-    setTickets([
-      { _id: 'tk1', employeeId: 'EMP003', title: 'VPN Access Request', description: 'Need credentials for remote staging server.', priority: 'Medium', status: 'Open' }
-    ]);
-    setAuditLogs([
-      { _id: 'al1', action: 'Create Department', details: 'Department Engineering created', createdAt: new Date(Date.now() - 3600000).toISOString() },
-      { _id: 'al2', action: 'Update Employee', details: 'Employee EMP003 profile updated', createdAt: new Date(Date.now() - 7200000).toISOString() },
-      { _id: 'al3', action: 'Run Payroll', details: 'Payroll executed for June 2026', createdAt: new Date(Date.now() - 86400000).toISOString() },
-      { _id: 'al4', action: 'Asset Assigned', details: 'MacBook Pro 16" assigned to employee Rahul Sharma', createdAt: new Date(Date.now() - 172800000).toISOString() },
-      { _id: 'al5', action: 'Add Candidate', details: 'Candidate Priya Singh added to screening pipeline', createdAt: new Date(Date.now() - 259200000).toISOString() }
-    ]);
-  };
+
 
   // Auth Operations
   const handleLogin = async (e) => {
@@ -298,44 +247,8 @@ export default function App() {
         setAuthSuccess('Welcome back!');
       }
     } catch (err) {
-      console.warn("Backend login failed. Falling back to offline client-side simulation.", err);
-      
-      let role = 'SUPER_ADMIN';
-      let name = 'Super Admin';
-      let employeeId = '';
-
-      if (loginEmail === 'hr@company.com') {
-        role = 'HR';
-        name = 'Sarah Jenkins';
-        employeeId = 'EMP001';
-      } else if (loginEmail === 'manager@company.com') {
-        role = 'MANAGER';
-        name = 'David Miller';
-        employeeId = 'EMP002';
-      } else if (loginEmail === 'employee@company.com') {
-        role = 'EMPLOYEE';
-        name = 'Rahul Sharma';
-        employeeId = 'EMP003';
-      } else if (loginEmail === 'finance@company.com') {
-        role = 'FINANCE';
-        name = 'Alice Cooper';
-        employeeId = 'EMP004';
-      }
-
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('role', role);
-      localStorage.setItem('userId', 'mock_user_id');
-      localStorage.setItem('employeeId', employeeId);
-      localStorage.setItem('name', name);
-      document.cookie = "accessToken=offline-mock-token; path=/;";
-
-      setIsAuthenticated(true);
-      setUserRole(role);
-      setUserId('mock_user_id');
-      setEmpId(employeeId);
-      setUserName(name);
-      
-      setAuthSuccess('Welcome back! (Offline Simulation Mode)');
+      console.error("Backend login failed.", err);
+      setAuthError(err.message || 'Login Failed. Ensure the backend is reachable.');
     }
   };
 
