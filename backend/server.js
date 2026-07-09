@@ -112,8 +112,6 @@ app.get('/', (req, res) => {
 // ──────────────────────────────────────────────
 // Global Error Handler
 // ──────────────────────────────────────────────
-// This catches errors forwarded by asyncHandler and any synchronous throws.
-// In production, we never leak stack traces or internal error messages.
 app.use((err, req, res, next) => {
   console.error(`[ERROR] ${req.method} ${req.url}:`, err.message);
   if (config.nodeEnv !== 'production') {
@@ -123,9 +121,8 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     success: false,
-    message: config.nodeEnv === 'production'
-      ? 'Internal Server Error'
-      : err.message || 'Internal Server Error',
+    message: err.message || 'Internal Server Error', // Temporarily exposed for debugging
+    stack: err.stack // Temporarily exposed for debugging
   });
 });
 

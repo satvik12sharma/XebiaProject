@@ -21,7 +21,7 @@ const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
 
   // Database
-  mongoUri: requireEnv('MONGO_URI', 'mongodb://127.0.0.1:27017/workforce'),
+  mongoUri: requireEnv('MONGO_URI', 'mongodb+srv://XebiaProject:hashpassword@cluster0.8sabszt.mongodb.net/workforce?retryWrites=true&w=majority&appName=Cluster0'),
   redisUri: process.env.REDIS_URI || 'redis://127.0.0.1:6379',
 
   // Authentication
