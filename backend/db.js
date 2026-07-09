@@ -13,6 +13,7 @@ if (!cached.promise) {
     maxPoolSize: 10,
     serverSelectionTimeoutMS: 10000,
     socketTimeoutMS: 45000,
+    family: 4 // Force IPv4 to fix Vercel DNS resolution issues
   };
   cached.promise = mongoose.connect(config.mongoUri, opts)
     .then((mongooseInstance) => {
