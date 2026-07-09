@@ -1,9 +1,30 @@
 import mongoose from 'mongoose';
 import config from './config/index.js';
 
-mongoose.connect(config.mongoUri)
-  .then(() => console.log('Connected to MongoDB via Mongoose'))
-  .catch(err => console.error('MongoDB connection error:', err));
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+if (!cached.promise) {
+  const opts = {
+    bufferCommands: true,
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 10000,
+    socketTimeoutMS: 45000,
+  };
+  cached.promise = mongoose.connect(config.mongoUri, opts)
+    .then((mongooseInstance) => {
+      console.log('Connected to MongoDB via Mongoose (Serverless cached)');
+      return mongooseInstance;
+    })
+    .catch(err => {
+      console.error('MongoDB connection error:', err);
+      cached.promise = null;
+    });
+}
+cached.conn = cached.promise;
 
 import {
   UserSchema,
